@@ -1,208 +1,246 @@
-/* Stile iniziale: tipografia, colori e variabili CSS sono già predisposti.
-   Lavoreremo su collegamenti, CSS condiviso e disposizione delle schede. */
-
-/* Scelte comuni: ogni regola usa var() per richiamarne il valore. */
 :root {
-  --colore-primario: #245c49;
-  --colore-primario-scuro: #173f32;
-  --colore-sfondo: #f5f2e9;
-  --colore-testo: #202923;
-  --font-testo: Arial, Helvetica, sans-serif;
-  --font-titoli: Georgia, "Times New Roman", serif;
+  --colore-primario: #16643e;
+  --colore-primario-scuro: #16643e;
+  --spaziatura-griglia: 2rem;
+  --font-testo: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-titoli: "Futura", "Futura Condensed", "Century Gothic", sans-serif;
 }
 
-* {
+/* Base */
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  background: var(--colore-sfondo);
-  color: var(--colore-testo);
   font-family: var(--font-testo);
-  font-size: 1rem;
-  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  color: #222;
+  background-color: #f9f9f9;
+  line-height: 1.5;
 }
 
-a {
-  color: var(--colore-primario);
-}
-
-a:hover {
-  text-decoration-thickness: 3px;
-}
-
-a:focus-visible {
-  outline: 3px solid var(--colore-testo);
-  outline-offset: 4px;
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 .container {
-  width: 92%;
-  max-width: 68rem;
+  width: 90%;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-.site-header {
-  padding: 1.25rem 0;
-  border-bottom: 4px solid #d8d2c5;
-}
-
-.brand {
-  display: inline-block;
-  color: var(--colore-testo);
-  font-size: 1.75rem;
-  font-weight: bold;
-  line-height: 1.2;
-  text-decoration: none;
-}
-
-.brand span {
-  display: block;
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: normal;
-}
-
-nav {
-  margin-top: 1rem;
-}
-
-nav a {
-  display: inline-block;
-  margin-right: 1rem;
-  padding: 0.25rem 0;
-}
-
-nav a[aria-current="page"] {
-  font-weight: bold;
-}
-
-.intro {
-  padding: 3rem 0 1rem;
-}
-
-.eyebrow,
-.event-meta {
-  color: #46564b;
-  font-size: 0.875rem;
-  font-weight: bold;
-}
-
-h1,
-h2,
-h3 {
-  font-family: var(--font-titoli);
-  line-height: 1.2;
-}
-
-h1 {
-  max-width: 18ch;
-  margin: 0.75rem 0 1.25rem;
-  font-size: 2.5rem;
-}
-
-h2 {
-  font-size: 1.75rem;
-}
-
-h3 {
-  margin: 0.5rem 0 0.75rem;
-  font-size: 1.375rem;
-}
-
-.lead {
-  max-width: 48ch;
-  font-size: 1.25rem;
-}
-
-.reading-text {
-  max-width: 65ch;
-}
-
-.button-link {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.5rem;
-  background: var(--colore-primario);
-  color: #ffffff;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.button-link:hover {
-  background: var(--colore-primario-scuro);
-}
-
-.content-section {
-  margin: 2rem 0 3rem;
-}
-
-.festival-image {
-  display: block;
-  width: 100%;
-  max-width: 54rem;
-  height: auto;
-  margin-top: 1.5rem;
-  border-radius: 0.75rem;
-}
-
-.venues {
-  padding-left: 1.25rem;
-}
-
-.venues li {
-  margin-bottom: 0.5rem;
-}
-
-/* Qui inseriremo la regola .event-grid durante la demo. */
-
-.event-card {
-  margin-bottom: 1.5rem;
-  overflow: hidden;
-  border: 1px solid #b7c0b7;
-  border-radius: 0.75rem;
-  background: #ffffff;
-}
-
-.event-card img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.event-body {
-  padding: 1.25rem;
-}
-
-.event-body p:last-child {
-  margin-bottom: 0;
-}
-
-.event-place {
-  color: #46564b;
-  font-size: 0.875rem;
-}
-
-.site-footer {
-  padding: 1.25rem 0;
-  border-top: 1px solid #b7c0b7;
-  color: #46564b;
-  font-size: 0.875rem;
-}
-
+/* Skip link per accessibilità */
 .skip-link {
   position: absolute;
-  top: -6rem;
-  left: 1rem;
-  padding: 0.75rem 1rem;
-  background: #ffffff;
-  color: var(--colore-testo);
+  top: -40px;
+  left: 0;
+  background: var(--colore-primario);
+  color: #fff;
+  padding: 8px;
+  z-index: 100;
+  transition: top 0.3s;
 }
 
 .skip-link:focus {
-  top: 1rem;
+  top: 0;
 }
 
-/* Qui aggiungeremo la media query durante la demo. */
+/* Intestazione */
+.site-header {
+  background-color: #fff;
+  border-bottom: 2px solid var(--colore-primario);
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+}
+
+.site-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: #000000d7;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand span {
+  font-size: 0.85rem;
+  font-weight: normal;
+  color: #666;
+}
+
+header nav {
+  display: flex;
+  gap: 1rem;
+}
+
+header nav a {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+header nav a:hover {
+  color: var(--colore-primario-scuro);
+  background-color: #f1f1f1;
+}
+
+header nav a[aria-current="page"] {
+  background-color: var(--colore-primario);
+  color: #fff;
+}
+
+header nav a[aria-current="page"]:hover {
+  background-color: var(--colore-primario-scuro);
+}
+
+/* Sezioni e Testi */
+.intro {
+  margin-bottom: 2.5rem;
+}
+
+.eyebrow {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-titoli);
+  color: #c0440ad7;
+  margin-top: 0;
+}
+
+.lead {
+  font-size: 1.2rem;
+  color: #444;
+}
+
+.reading-text {
+  max-width: 75ch;
+  color: #555;
+}
+
+.content-section {
+  margin-bottom: 3rem;
+}
+
+/* Griglia Eventi */
+.event-grid {
+  display: grid;
+  gap: var(--spaziatura-griglia);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 600px) {
+  .event-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .event-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Schede Evento */
+.event-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.event-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.event-meta {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.event-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.event-body p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.event-place {
+  margin-top: auto;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Collegamenti generali */
+a {
+  color: var(--colore-primario);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--colore-primario-scuro);
+  text-decoration: underline;
+}
+
+/* Pulsanti */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--colore-primario);
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: var(--colore-primario-scuro);
+  text-decoration: none;
+  color: #fff;
+}
+
+/* Footer */
+.site-footer {
+  background-color: #222;
+  color: #aaa;
+  text-align: center;
+  padding: 2rem 0;
+  margin-top: 4rem;
+  font-size: 0.9rem;
+}
+
+.site-footer p {
+  margin: 0;
+}
