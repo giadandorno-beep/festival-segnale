@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Programma — Segnale</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&amp;display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">Segnale<span>Festival di design</span></a>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="programma.html">Programma</a>
+        <a href="info.html">Info e luoghi</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenuto" class="container">
+    <section class="intro">
+      <p class="eyebrow">12–13 giugno · Torino · Festival immaginario</p>
+      <h1 id="titolo-programma">Il programma</h1>
+      <p class="lead">Incontri, laboratori e mostre: scegli da dove cominciare.</p>
+      <p class="reading-text">Il venerdì esploriamo lettere, materiali e immagini. Il sabato incontriamo oggetti, mappe e progetti condivisi. Scopri gli appuntamenti e i luoghi del festival.</p>
+    </section>
+
+    <section class="content-section">
+      <h2 id="titolo-eventi">Gli appuntamenti</h2>
+      <p id="stato-programma" class="reading-text" role="status" aria-live="polite">Caricamento del programma in corso…</p>
+      <div class="event-grid" id="elenco-eventi"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container"><p>Segnale · Progetto didattico · Festival immaginario</p></div></footer>
+
+  <script>
+    (function () {
+      const statoEl = document.getElementById('stato-programma');
+      const grigliaEl = document.getElementById('elenco-eventi');
+
+      const nomiGiorni = {
+        '2026-06-12': 'Venerdì 12 giugno',
+        '2026-06-13': 'Sabato 13 giugno'
+      };
+
+      function formattaData(dataIso) {
+        if (nomiGiorni[dataIso]) {
+          return nomiGiorni[dataIso];
+        }
+        return dataIso || '';
+      }
+
+      function creaSchedaEvento(evento, sediPerId) {
+        const articolo = document.createElement('article');
+        articolo.className = 'event-card';
+
+        if (evento.immagine) {
+          const img = document.createElement('img');
+          img.src = evento.immagine;
+          img.alt = evento.immagine_alt || evento.titolo || '';
+          img.width = 900;
+          img.height = 600;
+          articolo.appendChild(img);
+        }
+
+        const corpo = document.createElement('div');
+        corpo.className = 'event-body';
+
+        const meta = document.createElement('p');
+        meta.className = 'event-meta';
+        const partiMeta = [
+          formattaData(evento.data),
+          evento.orario,
+          evento.categoria
+        ].filter(Boolean);
+        meta.textContent = partiMeta.join(' · ');
+
+        const titolo = document.createElement('h3');
+        titolo.textContent = evento.titolo || 'Evento senza titolo';
+
+        const descrizione = document.createElement('p');
+        descrizione.textContent = evento.descrizione || '';
+
+        const luogo = document.createElement('p');
+        luogo.className = 'event-place';
+        const etichettaSede = document.createElement('strong');
+        etichettaSede.textContent = 'Sede: ';
+
+        const sedeTrovata = sediPerId.get(evento.sede_id);
+        const nomeSede = sedeTrovata && sedeTrovata.nome
+          ? sedeTrovata.nome
+          : 'Sede da definire';
+
+        luogo.appendChild(etichettaSede);
+        luogo.appendChild(document.createTextNode(nomeSede));
+
+        corpo.appendChild(meta);
+        corpo.appendChild(titolo);
+        corpo.appendChild(descrizione);
+        corpo.appendChild(luogo);
+
+        articolo.appendChild(corpo);
+        return articolo;
+      }
+
+      Promise.all([
+        fetch('dati/eventi.json').then((risposta) => {
+          if (!risposta.ok) {
+            throw new Error('Errore nel caricamento di eventi.json');
+          }
+          return risposta.json();
+        }),
+        fetch('dati/sedi.json').then((risposta) => {
+          if (!risposta.ok) {
+            throw new Error('Errore nel caricamento di sedi.json');
+          }
+          return risposta.json();
+        })
+      ])
+        .then(([eventi, sedi]) => {
+          if (!Array.isArray(eventi) || !Array.isArray(sedi)) {
+            throw new Error('Formato dati non valido');
+          }
+
+          if (eventi.length === 0) {
+            statoEl.textContent = 'Al momento non ci sono eventi in programma.';
+            grigliaEl.innerHTML = '';
+            return;
+          }
+
+          const sediPerId = new Map();
+          sedi.forEach((sede) => {
+            if (sede && typeof sede.id !== 'undefined') {
+              sediPerId.set(sede.id, sede);
+            }
+          });
+
+          statoEl.textContent = '';
+          grigliaEl.innerHTML = '';
+
+          const frammento = document.createDocumentFragment();
+          eventi.forEach((evento) => {
+            frammento.appendChild(creaSchedaEvento(evento, sediPerId));
+          });
+          grigliaEl.appendChild(frammento);
+        })
+        .catch(() => {
+          grigliaEl.innerHTML = '';
+          statoEl.textContent = 'Impossibile caricare il programma in questo momento. Riprova più tardi.';
+        });
+    })();
+  </script>
+</body>
+</html>
